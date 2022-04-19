@@ -31,8 +31,10 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     # because the forward pass is faster on the GPU whereas the loss is often (depending on your
     # hyperparameters) faster on the CPU.
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print('device is ', device)
     # FIXME: currently, the gradient is None if loss_device is cuda
     loss_device = torch.device("cpu")
+    print('loss_device is ', loss_device)
 
     # Create the model and the optimizer
     model = SpeakerEncoder(device, loss_device)
@@ -64,6 +66,7 @@ def train(run_id: str, clean_data_root: Path, models_dir: Path, umap_every: int,
     vis.log_dataset(dataset)
     vis.log_params()
     device_name = str(torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU")
+    print('device_name is', device_name)
     vis.log_implementation({"Device": device_name})
 
     # Training loop

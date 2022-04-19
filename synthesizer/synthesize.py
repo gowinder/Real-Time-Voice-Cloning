@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset, random_split
 from tqdm import tqdm
 
 from synthesizer.hparams import hparams_debug_string
@@ -62,8 +62,16 @@ def run_synthesis(in_dir: Path, out_dir: Path, syn_model_fpath: Path, hparams):
     embed_dir = in_dir.joinpath("embeds")
 
     dataset = SynthesizerDataset(metadata_fpath, mel_dir, embed_dir, hparams)
+    # indices = torch.arange(50)
+    # dataset_part = random_split(dataset, 1000)
     collate_fn = partial(collate_synthesizer, r=r, hparams=hparams)
-    data_loader = DataLoader(dataset, hparams.synthesis_batch_size, collate_fn=collate_fn, num_workers=2)
+    # data_loader = DataLoader(dataset, hparams.synthesis_batch_size, collate_fn=collate_fn, num_workers=2)
+    data_loader = DataLoader(dataset,
+                              collate_fn=lambda batch: collate_synthesizer(batch, r, hparams),
+                              batch_size=hparams.synthesis_batch_size,
+                              num_workers=2 if platform.system() != "Windows" else 0,
+                              shuffle=False,
+                              pin_memory=True)
 
     # Generate GTA mels
     meta_out_fpath = out_dir / "synthesized.txt"

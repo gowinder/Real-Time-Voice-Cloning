@@ -17,7 +17,8 @@ class HParams(object):
             for k in keys:
                 self.__dict__[k] = ast.literal_eval(values[keys.index(k)])
         return self
-
+batch_size = 10
+reduce = 2
 hparams = HParams(
         ### Signal Processing (used in both synthesizer and vocoder)
         sample_rate = 16000,
@@ -49,12 +50,12 @@ hparams = HParams(
                                                     # frame that has all values < -3.4
 
         ### Tacotron Training
-        tts_schedule = [(2,  1e-3,  20_000,  12),   # Progressive training schedule
-                        (2,  5e-4,  40_000,  12),   # (r, lr, step, batch_size)
-                        (2,  2e-4,  80_000,  12),   #
-                        (2,  1e-4, 160_000,  12),   # r = reduction factor (# of mel frames
-                        (2,  3e-5, 320_000,  12),   #     synthesized for each decoder iteration)
-                        (2,  1e-5, 640_000,  12)],  # lr = learning rate
+        tts_schedule = [(2,  1e-3,  20_000,  batch_size),   # Progressive training schedule
+                        (2,  5e-4,  40_000,  batch_size),   # (r, lr, step, batch_size)
+                        (2,  2e-4,  80_000,  batch_size),   #
+                        (2,  1e-4, 160_000,  batch_size),   # r = reduction factor (# of mel frames
+                        (reduce,  3e-5, 320_000,  batch_size),   #     synthesized for each decoder iteration)
+                        (reduce,  1e-5, 640_000,  batch_size)],  # lr = learning rate
 
         tts_clip_grad_norm = 1.0,                   # clips the gradient norm to prevent explosion - set to None if not needed
         tts_eval_interval = 500,                    # Number of steps between model evaluation (sample generation)
@@ -66,7 +67,7 @@ hparams = HParams(
         max_mel_frames = 900,
         rescale = True,
         rescaling_max = 0.9,
-        synthesis_batch_size = 16,                  # For vocoder preprocessing and inference.
+        synthesis_batch_size = 4,                  # For vocoder preprocessing and inference.
 
         ### Mel Visualization and Griffin-Lim
         signal_normalization = True,

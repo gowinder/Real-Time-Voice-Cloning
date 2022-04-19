@@ -368,6 +368,7 @@ class Tacotron(nn.Module):
         attn_hidden = torch.zeros(batch_size, self.decoder_dims, device=device)
         rnn1_hidden = torch.zeros(batch_size, self.lstm_dims, device=device)
         rnn2_hidden = torch.zeros(batch_size, self.lstm_dims, device=device)
+        #print('batch_size=%d, self.decoder_dims=%d, self.lstm_dims=%d' % (batch_size, self.decoder_dims, self.lstm_dims))
         hidden_states = (attn_hidden, rnn1_hidden, rnn2_hidden)
 
         # Initialise all lstm cell states and pack into tuple
