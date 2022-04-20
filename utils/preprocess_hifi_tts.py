@@ -13,7 +13,8 @@ def preprocess_hifi_tts(datasets_root: Path, datasets_name:
     print("\n    ".join(map(str, ["Using data from:"] + input_dirs)))
     assert all(input_dir.exists() for input_dir in input_dirs)
     
-    manifest_files = list(chain.from_iterable(input_dir.glob("*.json") for input_dir in input_dirs))
+    manifest_files = list(chain.from_iterable(
+        dataset_root.glob("*.json") for input_dir in input_dirs))
     for manifest_file in manifest_files:
         print(manifest_file)
         with manifest_file.open("r") as f:
