@@ -33,7 +33,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("datasets_root", type=Path, help=\
         "Path to the directory containing your hifi_tts_v0/audio datasets.")
-    parser.add_argument("--datasets_name", type=str, default="hifi_tts_v0", help=\
+    parser.add_argument("--datasets_name", type=str, default="hi_fi_tts_v0", help=\
         "Name of the dataset directory to process.")
     parser.add_argument("--subfolders", type=str, default="audio", help=\
         "Comma-separated list of subfolders to process inside your dataset directory")
