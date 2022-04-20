@@ -17,7 +17,8 @@ def preprocess_hifi_tts(datasets_root: Path, datasets_name:
     for manifest_file in manifest_files:
         print(manifest_file)
         with manifest_file.open("r") as f:
-            while line := f.readline():
+            lines = f.readlines()
+            for line in lines:
                 manifest = json.loads(line)
                 filepath = Path(dataset_root.joinpath(
                     manifest["audio_filepath"])).with_suffix(".txt")
