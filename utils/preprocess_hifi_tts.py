@@ -17,14 +17,14 @@ def preprocess_hifi_tts(datasets_root: Path, datasets_name:
         dataset_root.glob("*.json") for input_dir in input_dirs))
     for manifest_file in manifest_files:
         print(manifest_file)
-        with manifest_file.open("r") as f:
+        with manifest_file.open("r", encoding='utf-8') as f:
             lines = f.readlines()
             for line in lines:
                 manifest = json.loads(line)
                 filepath = Path(dataset_root.joinpath(
                     manifest["audio_filepath"])).with_suffix(".txt")
                 text = manifest["text"].upper()
-                with filepath.open("w") as wf:
+                with filepath.open("w", encoding='utf-8') as wf:
                     wf.write(text)
 
 if __name__ == "__main__":
